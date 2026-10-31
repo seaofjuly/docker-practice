@@ -193,7 +193,7 @@ $ docker run -d -p 8080:80 --name my-container my-web-server
     }
 ]
 ```
-
+![볼륨 검증 결과](./vol_result.png) 
 ---
 
 ## 9. Git 및 GitHub 연동
