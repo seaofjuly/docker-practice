@@ -172,12 +172,7 @@ $ docker run -d -p 8080:80 --name my-container my-web-server
 [결과 화면 스크린샷]
 ![웹 서버 접속 결과](web_result.png)
 
-git add .
-git commit -m "과제 완료 및 스크린샷 추가"
-git push origin main
 ---
-
-
 
 ## 8. Docker 볼륨 영속성 검증
 1. **볼륨 생성:** `docker volume create my-data`
