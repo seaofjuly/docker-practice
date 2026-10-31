@@ -199,12 +199,34 @@ $ docker run -d -p 8080:80 --name my-container my-web-server
 
 ---
 
+### 7. 커스텀 이미지 제작에 사용된 Dockerfile 내용
+FROM nginx:latest
+### 로컬의 index.html 파일을 컨테이너 내부의 경로로 복사합니다.
+COPY index.html /usr/share/nginx/html/index.html
+
+
 ## 8. Docker 데이터 관리 (볼륨 및 마운트)
 
 ### 8.1 Docker 볼륨 영속성 검증
 1. **볼륨 생성:** `docker volume create my-data`
 2. **연결 및 파일 생성:** 컨테이너 내 `/usr/share/nginx/html`에 마운트 후 `index.html` 생성.
 3. **삭제 후 재연결:** 컨테이너 삭제 후 새 컨테이너(`vol-test-new`) 연결 시 파일 유지 확인.
+
+#### 1. 볼륨 생성 확인
+$ docker volume create my-data
+my-data
+
+#### 2. 볼륨을 연결하여 컨테이너 실행 (nginx 경로에 마운트)
+$ docker run -d --name vol-test -v my-data:/usr/share/nginx/html nginx
+
+#### 3. 컨테이너 내부에서 파일 생성 (index.html 수정)
+$ docker exec vol-test sh -c "echo 'Volume Persistence Test Success' > /usr/share/nginx/html/index.html"
+
+# 4. 컨테이너 삭제 후 새 컨테이너로 데이터 유지 확인
+$ docker rm -f vol-test
+$ docker run --name vol-test-new -v my-data:/usr/share/nginx/html nginx cat /usr/share/nginx/html/index.html
+Volume Persistence Test Success
+
 
 ```bash
 # 검증 로그 (docker volume inspect my-data)
