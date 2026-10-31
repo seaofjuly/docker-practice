@@ -98,6 +98,18 @@ Server: Docker Desktop 4.97.0 (244584)
   API version:      1.56 (minimum version 1.40)
   OS/Arch:          linux/amd64     
 ```
+**Docker 시스템 정보 확인 (docker info):**
+```bash
+$ docker info
+# 전체 내용 중 상단 일부만 기록
+Kernel Version: 5.15.153.1-microsoft-standard-WSL2
+Operating System: Docker Desktop
+OSType: linux
+Architecture: x86_64
+CPUs: 12
+Total Memory: 7.633GiB
+```
+
 ### 5.2 기본 운영 명령
 
 1 **이미지 목록 확인 (`docker images`)**
@@ -187,7 +199,9 @@ $ docker run -d -p 8080:80 --name my-container my-web-server
 
 ---
 
-## 8. Docker 볼륨 영속성 검증
+## 8. Docker 데이터 관리 (볼륨 및 마운트)
+
+### 8.1 Docker 볼륨 영속성 검증
 1. **볼륨 생성:** `docker volume create my-data`
 2. **연결 및 파일 생성:** 컨테이너 내 `/usr/share/nginx/html`에 마운트 후 `index.html` 생성.
 3. **삭제 후 재연결:** 컨테이너 삭제 후 새 컨테이너(`vol-test-new`) 연결 시 파일 유지 확인.
@@ -207,6 +221,17 @@ $ docker run -d -p 8080:80 --name my-container my-web-server
 ]
 ```
 ![볼륨 검증 결과](./vol_result.png) 
+
+### 8.2 바인드 마운트(Bind Mount) 실습
+호스트 PC의 특정 디렉토리를 컨테이너와 직접 연결하여 파일을 수정해 보았습니다.
+
+1. 호스트 폴더 준비: C:\Users\User\codyssey\practice\html 폴더 생성 후 index.html 작성
+2. 컨테이너 실행:
+```bash
+$ docker run -d -p 8081:80 --name bind-test -v C:\Users\User\codyssey\practice\html:/usr/share/nginx/html nginx
+```
+3. 검증: 호스트에서 index.html 내용을 수정하면 브라우저(localhost:8081)에 즉시 반영됨을 확인하였습니다.
+
 ---
 
 ## 9. Git 및 GitHub 연동
@@ -223,3 +248,15 @@ remote.origin.url=https://github.com/seaofjuly/docker-practice.git
 - 저장소 URL: [https://github.com/seaofjuly/docker-practice](https://github.com/seaofjuly/docker-practice)
 - ![Git 연동 화면](./git_result.png)
 
+## 10. 트러블슈팅 (Troubleshooting)
+
+### Case 1: 포트 충돌 문제 (Port Conflict)
+- **문제:** Nginx 컨테이너 실행 시 `Bind for 0.0.0.0:8080 failed` 에러 발생하며 컨테이너가 실행되지 않음.
+- **원인 가설:** 이미 로컬 PC에서 8080 포트를 다른 서비스가 사용 중일 것으로 판단함.
+- **확인:** 터미널에서 `netstat` 명령으로 8080 포트 점유 상태 확인.
+- **해결:** 컨테이너 실행 시 호스트 포트를 8081로 변경(`-p 8081:80`)하여 정상 실행함.
+
+### Case 2: Docker 권한 문제 (Permission Denied)
+- **문제:** `docker` 명령어 입력 시 권한 관련 에러 발생.
+- **원인 가설:** 현재 사용자가 docker 그룹에 포함되지 않았거나, 관리자 권한이 필요함.
+- **해결:** 터미널을 '관리자 권한'으로 실행하거나, Docker Desktop이 정상적으로 실행 중인지 재확인 후 해결함.
