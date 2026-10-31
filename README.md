@@ -185,9 +185,13 @@ d555583ae5bc   my-web-server   "/docker-entrypoint.…"   57 seconds ago   Up 57
 - **베이스 이미지:** `nginx:latest`
 - **커스텀 포인트:** 기본 `index.html` 파일을 로컬의 커스텀 파일로 교체하여 "Jenny's First Web Server" 메시지 출력.
 
-### 7.1 커스텀 이미지 제작에 사용된 Dockerfile 내용
-FROM nginx:latest
-### 로컬의 index.html 파일을 컨테이너 내부의 경로로 복사합니다.
+### 7.1 Dockerfile 커스텀 예시
+```dockerfile
+FROM nginx:alpine
+LABEL org.opencontainers.image.title="my-custom-nginx"
+ENV APP_ENV=dev
+
+# 로컬의 site 폴더(또는 파일)를 컨테이너 내부의 경로로 복사합니다.
 COPY index.html /usr/share/nginx/html/index.html
 
 ### 7.2 빌드 및 실행 명령어
@@ -207,16 +211,32 @@ $ docker run -d -p 8080:80 --name my-container my-web-server
 
 ---
 
+## 8. Docker 포트 매핑 실행 로그 예시
 
+- **목적:** 동일한 이미지를 서로 다른 호스트 포트(8080, 8081)에 연결하여 정상 작동하는지 확인.
 
+```bash
+### 1. 이미지 빌드 (버전 1.0 태그 부여)
+$ docker build -t my-web-server:1.0 .
 
-## 8. Docker 데이터 관리 (볼륨 및 마운트)
+### 2. 8080 포트로 첫 번째 컨테이너 실행 및 확인
+$ docker run -d -p 8080:80 --name my-web-8080 my-web-server:1.0
+$ curl http://localhost:8080
+Jenny's First Web Server
 
-### 8.1 Docker 볼륨 영속성 검증
+### 3. 8081 포트로 두 번째 컨테이너 실행 및 확인
+$ docker run -d -p 8081:80 --name my-web-8081 my-web-server:1.0
+$ curl http://localhost:8081
+Jenny's First Web Server
+```
+
+## 9. Docker 데이터 관리 (볼륨 및 마운트)
+
+### 9.1 Docker 볼륨 영속성 검증
 1. **볼륨 생성:** `docker volume create my-data`
 2. **연결 및 파일 생성:** 컨테이너 내 `/usr/share/nginx/html`에 마운트 후 `index.html` 생성.
 3. **삭제 후 재연결:** 컨테이너 삭제 후 새 컨테이너(`vol-test-new`) 연결 시 파일 유지 확인.
-
+```bash
 #### 1. 볼륨 생성 확인
 $ docker volume create my-data
 my-data
@@ -231,7 +251,7 @@ $ docker exec vol-test sh -c "echo 'Volume Persistence Test Success' > /usr/shar
 $ docker rm -f vol-test
 $ docker run --name vol-test-new -v my-data:/usr/share/nginx/html nginx cat /usr/share/nginx/html/index.html
 Volume Persistence Test Success
-
+```
 
 ```bash
 # 검증 로그 (docker volume inspect my-data)
@@ -249,7 +269,7 @@ Volume Persistence Test Success
 ```
 ![볼륨 검증 결과](./vol_result.png) 
 
-### 8.2 바인드 마운트(Bind Mount) 실습
+### 9.2 바인드 마운트(Bind Mount) 실습
 호스트 PC의 특정 디렉토리를 컨테이너와 직접 연결하여 파일을 수정해 보았습니다.
 
 1. 호스트 폴더 준비: C:\Users\User\codyssey\practice\html 폴더 생성 후 index.html 작성
@@ -261,9 +281,9 @@ $ docker run -d -p 8081:80 --name bind-test -v C:\Users\User\codyssey\practice\h
 
 ---
 
-## 9. Git 및 GitHub 연동
+## 10. Git 및 GitHub 연동
 
-### 9.1 Git 설정 확인
+### 10.1 Git 설정 확인
 ```bash
 user.name=Jenny
 user.email=*******@gmail.com  # 개인정보 보호를 위해 마스킹 처리함
@@ -271,11 +291,11 @@ init.defaultbranch=master
 remote.origin.url=https://github.com/seaofjuly/docker-practice.git
 ```
 
-### 9.2 GitHub 연동 증거
+### 10.2 GitHub 연동 증거
 - 저장소 URL: [https://github.com/seaofjuly/docker-practice](https://github.com/seaofjuly/docker-practice)
 - ![Git 연동 화면](./git_result.png)
 
-## 10. 트러블슈팅 (Troubleshooting)
+## 11. 트러블슈팅 (Troubleshooting)
 
 ### Case 1: 포트 충돌 문제 (Port Conflict)
 - **문제:** Nginx 컨테이너 실행 시 `Bind for 0.0.0.0:8080 failed` 에러 발생하며 컨테이너가 실행되지 않음.
