@@ -132,11 +132,11 @@ $ docker run -it ubuntu bash
 # 내부에서 ls, echo 수행 후 exit
 ```
 
-6.2 attach vs exec 차이점 정리
+### 6.2 attach vs exec 차이점 정리
 attach: 실행 중인 컨테이너의 표준 입력/출력에 연결합니다. 종료 시 컨테이너가 멈출 수 있습니다.
 exec: 실행 중인 컨테이너에 새로운 프로세스를 실행합니다. 테스트나 디버깅 시 안전하게 사용 가능합니다.
 
-6.3 나만의 웹 서버 빌드 및 실행 (추가)
+### 6.3 나만의 웹 서버 빌드 및 실행 (추가)
 Dockerfile 작성 및 이미지 빌드
 ```bash
 # Dockerfile을 이용해 my-web-server 이미지 생성
