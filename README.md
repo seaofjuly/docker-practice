@@ -297,13 +297,22 @@ remote.origin.url=https://github.com/seaofjuly/docker-practice.git
 
 ## 11. 트러블슈팅 (Troubleshooting)
 
-### Case 1: 포트 충돌 문제 (Port Conflict)
-- **문제:** Nginx 컨테이너 실행 시 `Bind for 0.0.0.0:8080 failed` 에러 발생하며 컨테이너가 실행되지 않음.
-- **원인 가설:** 이미 로컬 PC에서 8080 포트를 다른 서비스가 사용 중일 것으로 판단함.
-- **확인:** 터미널에서 `netstat` 명령으로 8080 포트 점유 상태 확인.
-- **해결:** 컨테이너 실행 시 호스트 포트를 8081로 변경(`-p 8081:80`)하여 정상 실행함.
+### 11.1 VS Code에서 기존 폴더가 열리지 않는 문제
+문제: VS Code에서 Path does not exist 오류가 발생하며 작업 폴더가 열리지 않음.
+원인: 공용 컴퓨터 환경 특성상 기존에 작업했던 로컬 폴더가 삭제되었거나 경로가 변경됨.
+해결: GitHub 저장소(https://github.com/seaofjuly/my-mission)에서 git clone을 통해 프로젝트를 다시 내려받아 작업 환경을 즉시 복구함.
 
-### Case 2: Docker 권한 문제 (Permission Denied)
-- **문제:** `docker` 명령어 입력 시 권한 관련 에러 발생.
-- **원인 가설:** 현재 사용자가 docker 그룹에 포함되지 않았거나, 관리자 권한이 필요함.
-- **해결:** 터미널을 '관리자 권한'으로 실행하거나, Docker Desktop이 정상적으로 실행 중인지 재확인 후 해결함.
+### 11.2 포트 충돌 문제 (Port Conflict)
+문제: Nginx 컨테이너 실행 시 Bind for 0.0.0.0:8080 failed: port is already allocated 에러 발생.
+원인: 이미 로컬 PC의 8080 포트를 다른 서비스나 이전 컨테이너가 점유하고 있어 충돌이 발생함.
+해결: netstat 명령어로 포트 상태를 확인한 후, 컨테이너 실행 시 호스트 포트를 8081로 변경(-p 8081:80)하여 정상적으로 서비스를 실행함.
+
+### 11.3 Docker 권한 문제 (Permission Denied)
+문제: 터미널에서 docker 명령어 입력 시 권한 관련 에러 발생하며 명령어가 거부됨.
+원인: 현재 사용자 계정에 Docker 실행 권한이 없거나, Docker Desktop 엔진이 활성화되지 않음.
+해결: 터미널을 '관리자 권한'으로 실행하고, Docker Desktop의 상태를 확인하여 엔진이 정상 작동 중임을 확인한 후 해결함.
+
+### 11.4 Docker 컨테이너 삭제 후 데이터 유지 문제
+문제: 컨테이너를 삭제(docker rm)했을 때 내부에서 수정했던 파일이 함께 사라지는 현상에 대한 의문 발생.
+원인: 컨테이너의 기본 파일 시스템은 휘발성(Ephemeral)이므로 삭제 시 데이터가 소멸됨을 파악함.
+해결: Docker Volume을 생성하여 호스트와 컨테이너를 연결(Mount)함으로써, 컨테이너를 삭제하고 재생성하더라도 데이터가 영구적으로 유지되는 것을 실습을 통해 검증함.
