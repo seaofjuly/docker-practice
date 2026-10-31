@@ -75,6 +75,7 @@ $ chmod 700 test_dir
 # 디렉토리 권한 변경 후 (drwx------ 확인)
 $ ls -ld test_dir
 drwx------ 1 User 197121 0 Oct 31 10:45 test_dir
+```
 ---
 
 ## 5. Docker 실습 결과
@@ -103,7 +104,7 @@ feb2ffb8a849   hello-world   "/hello"                  13 minutes ago   Exited (
 1c2c2f9fd41b   nginx         "/docker-entrypoint.…"   38 hours ago     Exited (255) 22 hours ago   0.0.0.0:8080->80/tcp   web-mission-check
 ```
 
-3) **컨테이너 로그 확인 (docker logs 0fe9)**
+3 **컨테이너 로그 확인 (docker logs 0fe9)**
 ```bash
 Share images, automate workflows, and more with a free Docker ID:
  https://hub.docker.com/
@@ -113,7 +114,7 @@ For more examples and ideas, visit:
 ```
 ---
 
-4) **리소스 사용량 확인 (docker stats --no-stream)**
+4 **리소스 사용량 확인 (docker stats --no-stream)**
 ```bash
 CONTAINER ID   NAME              CPU %     MEM USAGE / LIMIT    MEM %     NET I/O        BLOCK I/O   PIDS
 a6da93a2c848   recursing_black   0.00%     1.32MiB / 7.619GiB   0.02%     1.7kB / 126B   0B / 0B     1
