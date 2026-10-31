@@ -82,7 +82,7 @@ drwx------ 1 User 197121 0 Oct 31 10:45 test_dir
 
 ### 5.1 Docker 설치 및 실행 확인
 - **Docker 버전 확인**
-  ```bash
+```bash
   $ docker --version
   Docker version 29.9.2, build a82e528       
 ```
