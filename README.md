@@ -81,10 +81,22 @@ drwx------ 1 User 197121 0 Oct 31 10:45 test_dir
 ## 5. Docker 실습 결과
 
 ### 5.1 Docker 설치 및 실행 확인
-- **Docker 버전 확인**
+터미널에서 `docker version` 명령어를 통해 클라이언트와 서버 엔진이 정상 작동함을 확인하였습니다.
+
 ```bash
-  $ docker --version
-  Docker version 29.9.2, build a82e528       
+$ docker version
+Client:
+ Version:           29.9.2
+ API version:       1.56
+ Go version:        go1.26.10
+ Git commit:        a82e528
+ OS/Arch:           windows/amd64
+
+Server: Docker Desktop 4.97.0 (244584)
+ Engine:
+  Version:          29.9.2
+  API version:      1.56 (minimum version 1.40)
+  OS/Arch:          linux/amd64     
 ```
 ### 5.2 기본 운영 명령
 
