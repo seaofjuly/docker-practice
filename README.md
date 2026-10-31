@@ -184,7 +184,13 @@ d555583ae5bc   my-web-server   "/docker-entrypoint.…"   57 seconds ago   Up 57
 
 - **베이스 이미지:** `nginx:latest`
 - **커스텀 포인트:** 기본 `index.html` 파일을 로컬의 커스텀 파일로 교체하여 "Jenny's First Web Server" 메시지 출력.
-- **빌드 및 실행 명령:**
+
+### 7.1 커스텀 이미지 제작에 사용된 Dockerfile 내용
+FROM nginx:latest
+### 로컬의 index.html 파일을 컨테이너 내부의 경로로 복사합니다.
+COPY index.html /usr/share/nginx/html/index.html
+
+### 7.2 빌드 및 실행 명령어
 ```bash
 # 이미지 빌드
 $ docker build -t my-web-server .
@@ -192,6 +198,8 @@ $ docker build -t my-web-server .
 # 컨테이너 실행 (8080 포트 연결)
 $ docker run -d -p 8080:80 --name my-container my-web-server
 ```
+### 7.3 접속 검증 결과
+- **접속 주소:**  localhost:8080
 - **접속 증거:**  브라우저 localhost:8080 접속 시 커스텀 메시지 확인 완료.
 
 [결과 화면 스크린샷]
@@ -199,10 +207,7 @@ $ docker run -d -p 8080:80 --name my-container my-web-server
 
 ---
 
-### 7. 커스텀 이미지 제작에 사용된 Dockerfile 내용
-FROM nginx:latest
-### 로컬의 index.html 파일을 컨테이너 내부의 경로로 복사합니다.
-COPY index.html /usr/share/nginx/html/index.html
+
 
 
 ## 8. Docker 데이터 관리 (볼륨 및 마운트)
@@ -222,7 +227,7 @@ $ docker run -d --name vol-test -v my-data:/usr/share/nginx/html nginx
 #### 3. 컨테이너 내부에서 파일 생성 (index.html 수정)
 $ docker exec vol-test sh -c "echo 'Volume Persistence Test Success' > /usr/share/nginx/html/index.html"
 
-# 4. 컨테이너 삭제 후 새 컨테이너로 데이터 유지 확인
+#### 4. 컨테이너 삭제 후 새 컨테이너로 데이터 유지 확인
 $ docker rm -f vol-test
 $ docker run --name vol-test-new -v my-data:/usr/share/nginx/html nginx cat /usr/share/nginx/html/index.html
 Volume Persistence Test Success
