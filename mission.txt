@@ -1,4 +1,4 @@
-L### 📄 README.md 최종 템플릿 
+### 📄 README.md 최종 템플릿 
 
 ```markdown
 # 🚀 개발 워크스테이션 구축 미션 결과 보고서
@@ -172,15 +172,34 @@ $ docker run -d -p 8080:80 --name my-container my-web-server
 ```
 - **접속 증거:**  브라우저 localhost:8080 접속 시 커스텀 메시지 확인 완료.
 
+[결과 화면 스크린샷]
+![웹 서버 접속 결과](web_result.png)
+
+git add .
+git commit -m "과제 완료 및 스크린샷 추가"
+git push origin main
 ---
 
+
+
 ## 8. Docker 볼륨 영속성 검증
-1. **볼륨 생성:** `docker volume create my-db-vol`
-2. **연결 및 파일 생성:** 컨테이너 내 `/data`에 마운트 후 파일 생성.
-3. **삭제 후 재연결:** 컨테이너 삭제 후 새 컨테이너 연결 시 파일 유지 확인.
+1. **볼륨 생성:** `docker volume create my-data`
+2. **연결 및 파일 생성:** 컨테이너 내 `/usr/share/nginx/html`에 마운트 후 `index.html` 생성.
+3. **삭제 후 재연결:** 컨테이너 삭제 후 새 컨테이너(`vol-test-new`) 연결 시 파일 유지 확인.
+
 ```bash
-# 검증 로그
-docker volume inspect my-db-vol
+# 검증 로그 (docker volume inspect my-data)
+[
+    {
+        "CreatedAt": "2024-05-22T...", 
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/my-data/_data",
+        "Name": "my-data",
+        "Options": null,
+        "Scope": "local"
+    }
+]
 ```
 
 ---
@@ -216,4 +235,3 @@ git config --list
 4.  **커밋 & 푸시:** 내용을 다 채우면 다시 GitHub에 올리세요.
 
 이렇게 정리해서 제출하면 완벽한 점수를 받으실 거예요! 작성하다가 막히는 부분(예: "ubuntu 컨테이너 로그는 어떻게 복사하나요?")이 있으면 바로 물어봐 주세요. 😊🔥
-earning Docker and Git
